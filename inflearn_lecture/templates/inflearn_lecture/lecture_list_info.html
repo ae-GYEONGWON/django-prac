@@ -1,0 +1,57 @@
+{% extends 'inflearn_lecture/base.html' %}
+
+{% block content %}
+
+    <style>
+        .contents {
+            width: 800px;
+            margin:auto;
+            padding: 100px;
+        }
+    </style>
+    <div class="contents">
+        {{ board_contents.board_text | safe}}
+    </div>
+    
+    <div style="width:800px;margin: auto;">
+        <form method="POST" action="{% url 'lecture_list_info' pk=board_contents.pk %}">
+            {% csrf_token %}
+            <div class="form-floating">
+                <input name="rate" type="number" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">평점</label>
+            </div>
+            <div class="form-floating">
+                <input name="writer" type="text" class="form-control" id="floatingPassword" placeholder="글쓴이">
+                <label for="floatingPassword">글쓴이</label>
+            </div>
+            <div class="form-floating">
+                <input name="comment" type="text" class="form-control" id="floatingPassword" placeholder="댓글">
+                <label for="floatingPassword">댓글</label>
+            </div>
+
+            <div class="form-check text-start my-3">
+                <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Remember me
+                </label>
+            </div>
+            <button class="btn btn-primary w-100 py-2" type="submit">Submit</button>
+        </form>
+    </div>
+
+    {% for comment_item in comment %}
+        <div style="border: 1px solid gray; border-radius: 10px;">
+
+            <h2>writer : {{ comment_item.writer }}</h2>
+            <h2>rate : {{ comment_item.rate }}</h2>
+            <h2>comment : {{ comment_item.comment  }}</h2>
+
+            <form method="POST" action="{% url 'comment_remove' pk=comment_item.pk %}">
+                {% csrf_token %}
+                <button>삭제하기</button>
+            </form>
+        </div>
+
+    {% endfor %}
+
+{% endblock %}
